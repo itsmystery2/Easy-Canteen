@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order</title>
+  </head>
+  <body>
+    <a href="{{ url_for('home') }}">
+      <img
+        src="static/logout.png"
+        style="width: 50px; height: 50px; position: absolute"
+      />
+    </a>
+    <center>
+      <h1 style="color: gray">Easy Canteen</h1>
+      <p style="font-size: 20px">Do not waste the Food. Enjoy the Delicacy</p> 
+    </center>
+    <div class="itemsbox">
+      <div class="item">
+        <img src="static/Dosa.webp" alt="" />
+        <span>Dosa</span>
+        <span>₹60/-</span>
+        <button id="add-item" onclick="addToCart('Dosa', 60)">Order</button>
+      </div>
+      <div class="item">
+        <img src="static/Idly.webp" alt="" />
+        <span>Idli</span>
+        <span>₹40/-</span>
+        <button id="add-item" onclick="addToCart('Idly', 40)">Order</button>
+      </div>
+      <div class="item">
+        <img src="static/vada.jpg" alt="" />
+        <span>Vada</span>
+        <span>₹30/-</span>
+        <button id="add-item" onclick="addToCart('Vada', 30)">Order</button>
+      </div>
+      <div class="item">
+        <img src="static/upma.png" alt="" />
+        <span>Upma</span>
+        <span>₹30/-</span>
+        <button id="add-item" onclick="addToCart('Upma', 30)">Order</button>
+      </div>
+      <div class="item">
+        <img src="static/bisibelebath.jpg" alt="" />
+        <span>Bisi Belebath</span>
+        <span>₹40/-</span>
+        <button id="add-item" onclick="addToCart('BisiBelebath', 40)">
+          Order
+        </button>
+      </div>
+      <div class="item">
+        <img src="static/chapati.jpg" alt="" />
+        <span>Chapati</span>
+        <span>₹30/-</span>
+        <button id="add-item" onclick="addToCart('Chapati', 30)">Order</button>
+      </div>
+      <div class="item">
+        <img src="static/poori.webp" alt="" />
+        <span>Poori</span>
+        <span>₹40/-</span>
+        <button id="add-item" onclick="addToCart('Poori', 40)">Order</button>
+      </div>
+      <div class="item">
+        <img src="static/ricebath.jpg" alt="" />
+        <span>Rice Bath</span>
+        <span>₹50/-</span>
+        <button id="add-item" onclick="addToCart('RiceBath', 50)">Order</button>
+      </div>
+      <div class="item">
+        <img src="static/coffee.jpg" alt="" />
+        <span>Coffee</span>
+        <span>₹15/-</span>
+        <button id="add-item" onclick="addToCart('Coffee', 15)">Order</button>
+      </div>
+      <div class="item">
+        <img src="static/tea.jpg" alt="" />
+        <span>Tea</span>
+        <span>₹10/-</span>
+        <button id="add-item" onclick="addToCart('Tea', 10)">Order</button>
+      </div>
+    </div>
+    <div class="cart" id="cart">
+      <h3> Your Cart</h3>
+      <div id="cart-items"></div>
+      <div class="total" id="total">Total: ₹0</div>
+      <div class="payment">
+        <button onclick="proceedToPay()" id="pay">Pay Now</button>
+      </div>
+    </div>
+    <footer>
+      <p style="color: gray; text-align: center">
+        &copy; 2025 Easy Canteen. All rights reserved.
+      </p>
+    </footer>
+    <style>
+      #pay {
+        display: block;
+        width: 100px;
+        height: 40px;
+        font-weight: bold;
+        background-color: #fd9d62;
+        color: rgb(23, 21, 21);
+        text-align: center;
+        font-size: 15px;
+        margin: 20px auto;
+        text-decoration: none;
+        border-radius: 10px;
+      }
+      .itemsbox {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 30px 30px;
+        margin-bottom: 0;
+        padding: 30px;
+        gap: 100px;
+        align-items: center;
+        justify-content: center;
+        background-color: #f1fdff;
+        border-radius: 20px;
+      }
+      .item {
+        display: flex;
+        flex-direction: column;
+        background-color: #c4f1f9;
+        background-size: cover;
+        padding: 40px 15px;
+        width: 200px;
+        height: 200px;
+        text-align: center;
+        border-radius: 10px;
+      }
+      .item span {
+        background-color: rgb(53, 187, 113);
+        margin: 3px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      }
+      .item button {
+        margin: 10px 0;
+        background-color: rgb(233, 101, 94);
+        border-style: none;
+        border-radius: 5px;
+        font-size: 1.2em;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+      }
+      .item button:hover {
+        background-color: rgb(243, 119, 119);
+        cursor: pointer;
+      }
+      .item img {
+        border-radius: 10px;
+        height: 60%;
+        margin-bottom: 5px;
+      }
+      .cart {
+        position: relative;
+        left: 1030px;
+        width: 25%;
+        background: #f0f1ee;
+        border-top: 2px solid #ccc;
+        border-radius: 20px;
+        opacity: 0.9;
+        padding: 15px;
+        overflow-y: auto;
+        margin: 30px;
+      }
+
+      .cart h3 {
+        margin-top: 0;
+      }
+
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+      }
+
+      .total {
+        font-weight: bold;
+        margin-top: 10px;
+        font-size: 18px;
+      }
+    </style>
+    <script>
+      let cart = {};
+
+      function addToCart(itemName, itemPrice) {
+        if (!cart[itemName]) {
+          cart[itemName] = { price: itemPrice, quantity: 1 };
+        } else {
+          cart[itemName].quantity += 1;
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartDisplay();
+      }
+      function removeFromCart(itemName) {
+        if (cart[itemName]) {
+          cart[itemName].quantity -= 1;
+          cart[itemName].price = cart[itemName].price;
+          localStorage.setItem("cart", JSON.stringify(cart));
+          if (cart[itemName].quantity <= 0) {
+            delete cart[itemName];
+          }
+        }
+
+        updateCartDisplay();
+      }
+
+      function updateCartDisplay() {
+        const cartItemsDiv = document.getElementById("cart-items");
+        const totalDiv = document.getElementById("total");
+        cartItemsDiv.innerHTML = "";
+
+        let total = 0;
+
+        for (const [item, info] of Object.entries(cart)) {
+          const subtotal = info.price * info.quantity;
+          total += subtotal;
+
+          document.getElementById("pay").href = `payment.html?amount=${total}`;
+
+          cartItemsDiv.innerHTML += `
+              <div class="cart-item">
+                <span>${item} x ${info.quantity}</span>
+                <span>₹${subtotal}</span>
+              </div>
+              <div class="cart-item">
+                <button onclick="addToCart('${item}', ${info.price})">+</button>
+                <button onclick="removeFromCart('${item}')">-</button>
+            `;
+        }
+
+        totalDiv.innerText = `Total: ₹${total}`;
+      }
+      function getCartTotal() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || {};
+        let total = 0;
+
+        for (const [item, info] of Object.entries(cart)) {
+          total += info.price * info.quantity;
+        }
+        return total;
+      }
+      function proceedToPay() {
+        const timestamp = new Date().toLocaleString();
+        let total = getCartTotal();
+        if (total <= 0) {
+          alert(
+            "Your cart is empty. Please add items before proceeding to payment."
+          );
+          return;
+        } else {
+          const confirmPay = confirm(
+            `Your total is ₹${total}. Do you want to continue to payment?`
+          );
+          if (confirmPay) {
+            localStorage.setItem("cart", JSON.stringify(cart));
+            const paymentBaseUrl = "{{ url_for('payment') }}";
+            const cartParam = encodeURIComponent(JSON.stringify(cart));
+            const finalUrl = `${paymentBaseUrl}?amount=${total}&cart=${cartParam}`;
+
+            window.location.href = finalUrl;
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment</title>
+</head>
+<body>
+  <a href="{{ url_for('order') }}">
+    <img src="static/logout.png" style="width:50px; height: 50px; position: absolute;"/> 
+  </a>
+    <center>
+  <h1 style="color:gray;">Easy Canteen</h1>
+  <div style="background-color:blanchedalmond; padding:20px; border-radius:10px; width:550px; height:550px;text-align:center;">
+  <h2>Pay Now</h2>
+  <p id="amount" style="font-size:20px;">Amount: ₹</p>
+  <img id="qrImage" src="" alt="QR Code" style="width:300px; height:300px;">
+  <br>
+  <button style="margin-top: 60px; height:40px; width: 200px; background-color:aquamarine; font-weight: bolder; font-size: 20px;" onclick="confirmPayment()">Payment Done</button>
+  </div>
+  <style>
+     *{
+            box-sizing: border-box; 
+            max-width: 100vw;
+          }
+          body{
+            width: auto;
+            height:auto;
+            overflow-x: hidden;
+          }
+  </style>
+  </center>
+  <script>
+    
+    const params = new URLSearchParams(window.location.search);
+
+    const amount = params.get("amount") || "0";
+    const cart = JSON.parse(decodeURIComponent(params.get("cart"))) || {};
+
+
+
+    // Display amount
+    document.getElementById("amount").innerText = `Amount: ₹${amount}`;
+
+    // Generate QR code
+    const upiUrl = `upi://pay?pa=7022544305-2@axl&pn=Easy Canteen&am=${amount}&cu=INR`;
+    const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiUrl)}`;
+    document.getElementById("qrImage").src = qrApi;
+    function confirmPayment() {
+      alert("✅ Transaction successful! Thank you for your payment.");
+      const timestamp = Date.now();
+      let currentTime = Date.now();
+      const prepTimes = {
+        Dosa: 180,
+        Idly: 120,
+        Vada: 120,
+        Upma: 90,
+        BisiBelebath: 90,
+        Chapati: 120,
+        Poori: 120,
+        RiceBath: 90,
+        Tea: 60,
+        Coffee: 60,
+      };
+      const cart = JSON.parse(localStorage.getItem("cart")) || {};
+      let orders = JSON.parse(localStorage.getItem("orders")) || [];
+      let hasItems = false;
+      for (const [item, info] of Object.entries(cart)) {
+        for (let i = 0; i < info.quantity; i++) {
+          hasItems = true;
+          const prepTime = prepTimes[item] || 180;
+          const order = {
+            dish: item,
+            quantity: 1,
+            price: info.price,
+            prepTime: prepTime,
+            timestamp: timestamp,
+            startTime: currentTime
+          };
+          orders.push(order);
+          currentTime += prepTime * 1000;
+        }
+      }
+        localStorage.setItem("orders", JSON.stringify(orders));
+        localStorage.removeItem("cart");
+        window.location.href = "{{ url_for('home') }}";
+    }
+  </script>
+  <a style="font-size:30px; text-align:center; margin-top: 1px;" href="{{ url_for('home') }}">Go to Home Page</a>
+  <footer style="text-align:center; margin-top: 20px;">
+    <p style="color: gray;">&copy; 2025 Easy Canteen. All rights reserved.</p>
+</footer>
+</body>
+</html>
